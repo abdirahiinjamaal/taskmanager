@@ -26,11 +26,11 @@ sudo chown -R ec2-user:ec2-user /opt/taskmanager
 
 # Create .env
 cat > /opt/taskmanager/backend/.env << 'EOF'
-DB_HOST=taskmanager.ciheysy2ems5.us-east-1.rds.amazonaws.com
+DB_HOST=rds endpoint
 DB_PORT=3306
-DB_NAME=taskmanager
+DB_NAME=dbname
 DB_USER=admin
-DB_PASSWORD=taskmanager
+DB_PASSWORD=password
 DB_SSL=false
 PORT=8080
 NODE_ENV=production
