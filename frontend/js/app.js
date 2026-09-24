@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://44.214.6.132:8080/api';
+const API_BASE_URL = 'http://taskmanager-alb-1258962240.us-east-1.elb.amazonaws.com/api';
 
 let tasks = [];
 let currentFilter = 'all';
