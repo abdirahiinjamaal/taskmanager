@@ -13,6 +13,7 @@ echo "[1/8] Updating system..."
 sudo yum update -y
 
 echo "[2/8] Installing Node.js 20..."
+sudo yum remove -y nodejs nodejs-full-i18n 2>/dev/null || true
 curl -fsSL https://rpm.nodesource.com/setup_20.x | sudo bash -
 sudo yum install -y nodejs
 

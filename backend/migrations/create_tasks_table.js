@@ -18,7 +18,7 @@ const migration = async () => {
     await sequelize.authenticate();
     console.log('Database connection established successfully.');
 
-    const query = `
+    await sequelize.query(`
       CREATE TABLE IF NOT EXISTS tasks (
         id INT AUTO_INCREMENT PRIMARY KEY,
         title VARCHAR(255) NOT NULL,
@@ -28,14 +28,12 @@ const migration = async () => {
         due_date DATETIME,
         created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
         updated_at DATETIME DEFAULT CURRENT_TIMESTAMP ON UPDATE CURRENT_TIMESTAMP
-      );
+      )
+    `);
 
-      CREATE INDEX idx_tasks_status ON tasks(status);
-      CREATE INDEX idx_tasks_priority ON tasks(priority);
-      CREATE INDEX idx_tasks_created_at ON tasks(created_at);
-    `;
-
-    await sequelize.query(query);
+    await sequelize.query(`CREATE INDEX idx_tasks_status ON tasks(status)`);
+    await sequelize.query(`CREATE INDEX idx_tasks_priority ON tasks(priority)`);
+    await sequelize.query(`CREATE INDEX idx_tasks_created_at ON tasks(created_at)`);
     console.log('Migration completed successfully: tasks table created.');
     
     process.exit(0);
