@@ -1,4 +1,4 @@
-const API_BASE_URL = 'http://localhost:3000/api';
+const API_BASE_URL = 'http://44.214.6.132:8080/api';
 
 let tasks = [];
 let currentFilter = 'all';

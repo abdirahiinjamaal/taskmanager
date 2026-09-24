@@ -5,8 +5,8 @@ set -e
 # ==========================================
 # 1. Install Node.js 20
 # ==========================================
-curl -fsSL https://rpm.nodesource.com/setup_20.x | bash -
-dnf install -y nodejs git
+sudo curl -fsSL https://rpm.nodesource.com/setup_20.x | bash -
+sudo dnf install -y nodejs git
 
 # Verify
 node --version
@@ -15,26 +15,26 @@ npm --version
 # ==========================================
 # 2. Install PM2
 # ==========================================
-npm install -g pm2
+sudo npm install -g pm2
 
 # ==========================================
 # 3. Clone application
 # ==========================================
-cd /opt
+sudo cd /opt
 
-git clone https://github.com/YOUR_USERNAME/taskmanager.git
+sudo git clone https://github.com/abdirahiinjamaal/taskmanager.git
 
-cd /opt/taskmanager/backend
+sudo cd /opt/taskmanager/backend
 
 # ==========================================
 # 4. Create .env
 # ==========================================
-cat > .env <<'EOF'
+sudo cat > .env <<'EOF'
 DB_HOST=taskmanager.ciheysy2ems5.us-east-1.rds.amazonaws.com
 DB_PORT=3306
 DB_NAME=taskmanager
 DB_USER=admin
-DB_PASSWORD=YOUR_DATABASE_PASSWORD
+DB_PASSWORD=taskmanager
 DB_SSL=false
 
 PORT=8080
@@ -42,22 +42,22 @@ NODE_ENV=production
 EOF
 
 # Protect .env
-chmod 600 .env
+sudo chmod 600 .env
 
 # ==========================================
 # 5. Install backend dependencies
 # ==========================================
-npm install --production
+sudo npm install --production
 
 # ==========================================
 # 6. Run database migration
 # ==========================================
-npm run migrate
+sudo npm run migrate
 
 # ==========================================
 # 7. Start backend with PM2
 # ==========================================
-pm2 start server.js --name taskmanager
+sudo pm2 start server.js --name taskmanager
 
 # Save PM2 process list
 pm2 save

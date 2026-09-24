@@ -8,7 +8,11 @@ const taskRoutes = require('./routes/tasks');
 const app = express();
 const PORT = process.env.PORT || 3000;
 
-app.use(cors());
+app.use(cors({
+  origin: 'http://taskmanager-aj-2026.s3-website-us-east-1.amazonaws.com',
+  methods: ['GET', 'POST', 'PUT', 'DELETE', 'PATCH'],
+  allowedHeaders: ['Content-Type']
+}));
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
@@ -36,3 +40,4 @@ const startServer = async () => {
 };
 
 startServer();
+
