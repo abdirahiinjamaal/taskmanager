@@ -31,9 +31,20 @@ const migration = async () => {
       )
     `);
 
-    await sequelize.query(`CREATE INDEX idx_tasks_status ON tasks(status)`);
-    await sequelize.query(`CREATE INDEX idx_tasks_priority ON tasks(priority)`);
-    await sequelize.query(`CREATE INDEX idx_tasks_created_at ON tasks(created_at)`);
+    const [statusIndex] = await sequelize.query(`SHOW INDEX FROM tasks WHERE Key_name = 'idx_tasks_status'`);
+    if (statusIndex.length === 0) {
+      await sequelize.query(`CREATE INDEX idx_tasks_status ON tasks(status)`);
+    }
+
+    const [priorityIndex] = await sequelize.query(`SHOW INDEX FROM tasks WHERE Key_name = 'idx_tasks_priority'`);
+    if (priorityIndex.length === 0) {
+      await sequelize.query(`CREATE INDEX idx_tasks_priority ON tasks(priority)`);
+    }
+
+    const [createdAtIndex] = await sequelize.query(`SHOW INDEX FROM tasks WHERE Key_name = 'idx_tasks_created_at'`);
+    if (createdAtIndex.length === 0) {
+      await sequelize.query(`CREATE INDEX idx_tasks_created_at ON tasks(created_at)`);
+    }
     console.log('Migration completed successfully: tasks table created.');
     
     process.exit(0);
