@@ -1,46 +1,77 @@
 #!/bin/bash
 
+set -e
 
-# Install Node.js
-curl -fsSL https://rpm.nodesource.com/setup_20.x | sudo bash -
-sudo yum install -y nodejs
+# ==========================================
+# 1. Install Node.js 20
+# ==========================================
+curl -fsSL https://rpm.nodesource.com/setup_20.x | bash -
+dnf install -y nodejs git
 
-#install pm2
-sudo npm install -g pm2
+# Verify
+node --version
+npm --version
 
-# Clone your repo
-cd ~
-git clone https://github.com/yourusername/taskmanager.git
-cd taskmanager/backend
+# ==========================================
+# 2. Install PM2
+# ==========================================
+npm install -g pm2
 
-# Configure environment
-nano .env
+# ==========================================
+# 3. Clone application
+# ==========================================
+cd /opt
 
-#.env content:
-#DB_HOST=your-rds-endpoint.amazonaws.com
-#DB_PORT=3306
-#DB_NAME=taskmanager
-#DB_USER=admin
-#DB_PASSWORD=yourpassword
-#DB_SSL=true
-#PORT=3000
-#NODE_ENV=production
+git clone https://github.com/YOUR_USERNAME/taskmanager.git
 
-# Install dependencies
+cd /opt/taskmanager/backend
+
+# ==========================================
+# 4. Create .env
+# ==========================================
+cat > .env <<'EOF'
+DB_HOST=taskmanager.ciheysy2ems5.us-east-1.rds.amazonaws.com
+DB_PORT=3306
+DB_NAME=taskmanager
+DB_USER=admin
+DB_PASSWORD=YOUR_DATABASE_PASSWORD
+DB_SSL=false
+
+PORT=8080
+NODE_ENV=production
+EOF
+
+# Protect .env
+chmod 600 .env
+
+# ==========================================
+# 5. Install backend dependencies
+# ==========================================
 npm install --production
 
-# Run migration
+# ==========================================
+# 6. Run database migration
+# ==========================================
 npm run migrate
 
-
-# Start app
+# ==========================================
+# 7. Start backend with PM2
+# ==========================================
 pm2 start server.js --name taskmanager
+
+# Save PM2 process list
 pm2 save
-pm2 startup
 
+# Configure PM2 to start on boot
+pm2 startup systemd -u root --hp /root
 
-#to update letter
-cd ~/taskmanager/backend
-git pull
-npm install --production
-pm2 restart taskmanager
+# ==========================================
+# 8. Enable PM2 service
+# ==========================================
+systemctl enable pm2-root
+systemctl start pm2-root
+
+# ==========================================
+# 9. Show status
+# ==========================================
+pm2 status
